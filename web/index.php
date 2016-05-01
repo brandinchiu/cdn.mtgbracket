@@ -56,10 +56,13 @@ $app->get('/images', function(Silex\Application $app, Request $request){
  */
 $app->get('/images/cards/{expansion}/{card}', function(Silex\Application $app, Request $request, $expansion, $card){
     /**
-     * TODO: compression logic.
+     * manage compression based on request referrer.
      */
-    $compression = 'uncompressed'; // | compressed
-    
+    $referrer = str_replace(array('http://', 'https://'), '', $request->server->get('HTTP_REFERER'));
+    $compression = (false === strpos('localhost', $referrer)) ? 'uncompressed' : 'compressed';
+
+    file_put_contents(__DIR__ . "../../test.log", $referrer, FILE_APPEND);
+
     $path = sprintf('%s/../images/cards/%s/%s/%s', __DIR__, $compression, $expansion, $card);
 
     if(!file_exists($path)){
