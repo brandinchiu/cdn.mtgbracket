@@ -47,12 +47,8 @@ $app->get('/', function(Silex\Application $app, Request $request){
     return print_r($_SERVER, 1);
 });
 
-$app->get('/images', function(Silex\Application $app, Request $request){
-    return 'images root';
-});
-
 /**
- * load cards
+ * load cards.
  */
 $app->get('/images/cards/{expansion}/{card}', function(Silex\Application $app, Request $request, $expansion, $card){
     /**
@@ -64,6 +60,19 @@ $app->get('/images/cards/{expansion}/{card}', function(Silex\Application $app, R
     file_put_contents(__DIR__ . "../../test.log", $referrer, FILE_APPEND);
 
     $path = sprintf('%s/../images/cards/%s/%s/%s', __DIR__, $compression, $expansion, $card);
+
+    if(!file_exists($path)){
+        $app->abort(404);
+    }
+
+    return $app->sendFile($path);
+});
+
+/**
+ * image path for all other assets.
+ */
+$app->get('/images/{image}', function(Silex\Application $app, Request $request, $image){
+    $path = sprintf('%s/../images/%s', __DIR__, $image);
 
     if(!file_exists($path)){
         $app->abort(404);
