@@ -55,9 +55,7 @@ $app->get('/images/cards/{expansion}/{card}', function(Silex\Application $app, R
      * manage compression based on request referrer.
      */
     $referrer = str_replace(array('http://', 'https://'), '', $request->server->get('HTTP_REFERER'));
-    $compression = (false === strpos('localhost', $referrer)) ? 'uncompressed' : 'compressed';
-
-    file_put_contents(__DIR__ . "../../test.log", $referrer, FILE_APPEND);
+    $compression = ($referrer == null) ? 'uncompressed' : 'compressed';
 
     $path = sprintf('%s/../images/cards/%s/%s/%s', __DIR__, $compression, $expansion, $card);
 
