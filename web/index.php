@@ -79,6 +79,6 @@ $app->get('/images/{image}', function(Silex\Application $app, Request $request, 
     }
 
     return $app->sendFile($path);
-});
+})->assert('image', '.*');
 
 $app->run();
