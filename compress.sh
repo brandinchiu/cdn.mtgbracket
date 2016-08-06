@@ -7,7 +7,7 @@ cd images/cards/uncompressed
 for D in *; do
     if [ ! -d "../compressed/$D" ]; then
         echo "Directory does not exist; creating ../compressed/$D";
-        mkdir "../compressed/$D"
+        mkdir -p "../compressed/$D"
     fi
 
     echo "Compressing images:";
