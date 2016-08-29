@@ -25,6 +25,11 @@ class CardCompressionCommand extends Command
             ->setDescription('Compresses card images');
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return void
+     */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $path = __DIR__ . '/../../../images/cards/compressed';
@@ -57,9 +62,7 @@ class CardCompressionCommand extends Command
                 $output->write(sprintf('%s ... ', $card));
 
                 /**
-                 * TODO: compress the image and save.
-                 * TODO: remove .full from file name.
-                 * TODO: add gd library
+                 * compress image.
                  */
                 imagejpeg(
                     imagecreatefromstring(file_get_contents(sprintf('%s/%s/%s', str_replace('compressed', 'uncompressed', $path), $expansion, $card))),
