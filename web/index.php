@@ -54,8 +54,7 @@ $app->error(function(\Exception $e) use ($app){
             'line' => $e->getLine()
         ];
     }
-
-    $response->setStatusCode($code);
+    
     $response->setContent(json_encode($content));
 
     return $response;
