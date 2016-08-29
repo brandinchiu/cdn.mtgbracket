@@ -61,8 +61,8 @@ $app->error(function(\Exception $e) use ($app){
     return $response;
 });
 
-$app->register(new Igorw\Silex\ConfigServiceProvider(__DIR__ . '/../config/parameters.yml'));
-$app->register(new Igorw\Silex\ConfigServiceProvider(__DIR__ . '/../config/config.yml', $app['parameters']));
+//$app->register(new Igorw\Silex\ConfigServiceProvider(__DIR__ . '/../config/parameters.yml'));
+//$app->register(new Igorw\Silex\ConfigServiceProvider(__DIR__ . '/../config/config.yml', $app['parameters']));
 
 /**
  * GET root
