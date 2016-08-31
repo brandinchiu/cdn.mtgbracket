@@ -18,8 +18,8 @@ $app['debug'] = true;
 /**
  * error handler.
  */
-$app->error(function(\Exception $e) use ($app){
-    $code = $e->getCode();
+$app->error(function(Exception\HttpException $e) use ($app){
+    $code = $e->getStatusCode();
     $response = new Response();
 
     switch($code){
@@ -54,7 +54,7 @@ $app->error(function(\Exception $e) use ($app){
             'line' => $e->getLine()
         ];
     }
-    
+
     $response->setContent(json_encode($content));
 
     return $response;
