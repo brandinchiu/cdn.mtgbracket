@@ -6,9 +6,10 @@
  * Time: 9:34 AM
  */
 
+use MisfitPixel\Exception;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -18,23 +19,19 @@ $app['debug'] = true;
 /**
  * error handler.
  */
-$app->error(function(Exception\HttpException $e) use ($app){
+$app->error(function(HttpException $e) use ($app){
     $code = $e->getStatusCode();
     $response = new Response();
+    $response->headers->set('Content-Type', 'application/json');
 
-    switch($code){
-        case Response::HTTP_NOT_FOUND:
-            /**
-             * TODO: provide default 404 image.
-             */
-            $message = 'not found';
-            $response->setStatusCode(Response::HTTP_NOT_FOUND);
-
+    switch(true){
+        case $e instanceof Exception\CardNotFoundException:
             break;
-        default:
-            $message = 'error';
-            $response->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR);
 
+        case $e instanceof Exception\FileNotFoundException:
+            break;
+
+        default:
             break;
     }
 
@@ -44,7 +41,7 @@ $app->error(function(Exception\HttpException $e) use ($app){
     $content = [
         'error' => [
             'code' => $code,
-            'message' => ($app['debug']) ? $e->getMessage() : $message,
+            'message' => $e->getMessage()
         ]
     ];
 
@@ -83,7 +80,7 @@ $app->get('/images/cards/{expansion}/{card}', function(Silex\Application $app, R
     $path = sprintf('%s/../images/cards/%s/%s/%s', __DIR__, $compression, $expansion, $card);
 
     if(!file_exists($path)){
-        $app->abort(404);
+        return $app->sendFile(sprintf('%s/../images/cards/back.png', __DIR__));
     }
 
     return $app->sendFile($path);
@@ -96,7 +93,7 @@ $app->get('/images/{image}', function(Silex\Application $app, Request $request, 
     $path = sprintf('%s/../images/%s', __DIR__, $image);
 
     if(!file_exists($path)){
-        $app->abort(404);
+        throw new Exception\FileNotFoundException(404, 'File not found.');
     }
 
     return $app->sendFile($path);
