@@ -66,7 +66,7 @@ class CardCompressionCommand extends Command
                  */
                 imagejpeg(
                     imagecreatefromstring(file_get_contents(sprintf('%s/%s/%s', str_replace('compressed', 'uncompressed', $path), $expansion, $card))),
-                    sprintf('%s/%s', $compressionPath, str_replace(['.full'], '', $card)),
+                    sprintf('%s/%s', $compressionPath, str_replace(['.full', '.xlhq'], '', $card)),
                     60
                 );
 
